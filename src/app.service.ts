@@ -5,4 +5,7 @@ export class AppService {
   getHello(): string {
     return 'Platzi Store';
   }
+  getProductId(): any {
+    return '';
+  }
 }

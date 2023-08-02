@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -9,13 +9,18 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-  // con slash o sin slash Nest me lo permite
-  @Get('/new')
-  newRoute(): string {
-    return 'new';
+
+  // en @Param le decimos el nombre del atributo que queremos recibir
+  @Get('products/:id')
+  getProductId(@Param('id') id: string) {
+    return `product ${id}`;
   }
-  @Get('/ruta/')
-  hello(): string {
-    return 'ruta con /sas/';
+
+  @Get('/products/:productId/categories/:categoryId')
+  getCategory(
+    @Param('productId') productId: string,
+    @Param('categoryId') categoryId: string,
+  ) {
+    return `Product id = ${productId} | Category id = ${categoryId}`;
   }
 }
