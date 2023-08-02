@@ -9,4 +9,13 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
+  // con slash o sin slash Nest me lo permite
+  @Get('/new')
+  newRoute(): string {
+    return 'new';
+  }
+  @Get('/ruta/')
+  hello(): string {
+    return 'ruta con /sas/';
+  }
 }
