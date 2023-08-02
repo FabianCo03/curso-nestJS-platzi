@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ParamsTokenFactory } from '@nestjs/core/pipes';
 
 @Controller()
 export class AppController {
@@ -8,6 +9,13 @@ export class AppController {
   @Get()
   getHello(): string {
     return this.appService.getHello();
+  }
+
+  // Esta ruta NO es dinámica
+  // Las que NO son dinámicas deben ir de primis
+  @Get('products/filter')
+  getProductFilter() {
+    return `Soy un Product Filter`;
   }
 
   // en @Param le decimos el nombre del atributo que queremos recibir
@@ -22,5 +30,14 @@ export class AppController {
     @Param('categoryId') categoryId: string,
   ) {
     return `Product id = ${productId} | Category id = ${categoryId}`;
+  }
+
+  @Get('/products')
+  getProducts(
+    @Query('limit') limit = 100,
+    @Query('offset') offset = 0,
+    @Query('brand') brand: string,
+  ) {
+    return `Limit -> ${limit} | Offset -> ${offset} | Brand -> ${brand}`;
   }
 }
