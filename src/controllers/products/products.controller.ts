@@ -7,7 +7,13 @@ import {
   Post,
   Put,
   Query,
+  HttpStatus,
+  HttpCode,
+  Res,
 } from '@nestjs/common';
+
+// ese Response lo podemos usar cuando tengamos un token
+import { Response } from 'express';
 
 @Controller('products')
 export class ProductsController {
@@ -39,8 +45,12 @@ export class ProductsController {
   }
   // en @Param le decimos el nombre del atributo que queremos recibir
   @Get(':id')
-  getId(@Param('id') id: string) {
-    return { message: `product ${id}` };
+  @HttpCode(HttpStatus.OK)
+  getId(@Res() response: Response, @Param('id') id: string) {
+    // estilo express, bueno usarlo en algunos casos pero mejor usar decoradores
+    response.status(200).send({
+      message: `product ${id}`,
+    });
   }
   @Post()
   create(@Body() payload: any) {
