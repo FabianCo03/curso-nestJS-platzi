@@ -1,9 +1,13 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 
 @Controller('customers')
 export class CustomersController {
   @Get()
-  getCustomers() {
+  get() {
     return `Customers`;
+  }
+  @Post()
+  create(@Body() payload: any) {
+    return { message: 'Crear customers', payload };
   }
 }
