@@ -8,6 +8,7 @@ import {
   Put,
   HttpStatus,
   HttpCode,
+  Delete,
 } from '@nestjs/common';
 
 import { ProductsService } from '../../services/products/products.service';
@@ -46,5 +47,9 @@ export class ProductsController {
   @Put(':id')
   update(@Param('id') id: string, @Body() payload: any) {
     return this.productsService.update(+id, payload);
+  }
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.productsService.remove(+id);
   }
 }
