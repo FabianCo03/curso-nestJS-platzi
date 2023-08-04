@@ -1,73 +1,50 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
+  Query,
   Param,
   Post,
+  Body,
   Put,
-  Query,
   HttpStatus,
   HttpCode,
-  Res,
 } from '@nestjs/common';
 
-// ese Response lo podemos usar cuando tengamos un token
-import { Response } from 'express';
+import { ProductsService } from '../../services/products/products.service';
 
 @Controller('products')
 export class ProductsController {
+  constructor(private productsService: ProductsService) {}
   @Get()
-  get() {
-    return {
-      message: 'Productos',
-    };
-  }
-  @Get('/queries')
-  getQueries(
-    @Query('limit') limit = 100,
-    @Query('offset') offset = 0,
-    @Query('brand') brand = 'Marca',
+  getProducts(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Query('limit') _limit = 100,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Query('offset') _offset = 0,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    @Query('brand') _brand: string,
   ) {
-    return {
-      Limit: limit,
-      Offset: offset,
-      Brand: brand,
-    };
+    return this.productsService.findAll();
   }
-  // Esta ruta NO es dinámica
-  // Las que NO son dinámicas deben ir de primis
-  @Get('/filter')
-  getFilter() {
-    return {
-      message: `Product Filter, ruta estática`,
-    };
+
+  @Get('filter')
+  getProductFilter() {
+    return `yo soy un filter`;
   }
-  // en @Param le decimos el nombre del atributo que queremos recibir
-  @Get(':id')
-  @HttpCode(HttpStatus.OK)
-  getId(@Res() response: Response, @Param('id') id: string) {
-    // estilo express, bueno usarlo en algunos casos pero mejor usar decoradores
-    response.status(200).send({
-      message: `product ${id}`,
-    });
+
+  @Get(':productId')
+  @HttpCode(HttpStatus.ACCEPTED)
+  getOne(@Param('productId') productId: string) {
+    return this.productsService.findOne(+productId);
   }
+
   @Post()
   create(@Body() payload: any) {
-    return { message: 'Crear producto', payload };
+    return this.productsService.create(payload);
   }
+
   @Put(':id')
-  update(@Param('id') id: number, @Body() payload: any) {
-    return {
-      message: 'update products',
-      id,
-      payload,
-    };
-  }
-  @Delete(':id')
-  delete(@Param('id') id: number) {
-    return {
-      id: id,
-    };
+  update(@Param('id') id: string, @Body() payload: any) {
+    return this.productsService.update(+id, payload);
   }
 }
