@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from 'src/dtos/users.dtos';
 import { User } from 'src/entities/users.entities';
 
 @Injectable()
@@ -18,7 +19,7 @@ export class UsersService {
   findOne(id: number) {
     return this.users.find((item) => item.id === id);
   }
-  create(payload: any) {
+  create(payload: CreateUserDto) {
     this.counterId = this.counterId + 1;
     const newUser = {
       id: this.counterId,

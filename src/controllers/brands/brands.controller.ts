@@ -7,6 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+import { CreateBrandDto } from 'src/dtos/brands.dtos';
 
 @Controller('brands')
 export class BrandsController {
@@ -17,7 +18,7 @@ export class BrandsController {
     };
   }
   @Post()
-  create(@Body() payload: any) {
+  create(@Body() payload: CreateBrandDto) {
     return { message: 'Crear brand', payload };
   }
   @Put(':id')

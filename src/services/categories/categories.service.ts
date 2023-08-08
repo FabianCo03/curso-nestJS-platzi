@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CreateCategoryDto } from 'src/dtos/categories.dtos';
 import { Categories } from 'src/entities/categories.entities';
 
 @Injectable()
@@ -8,7 +9,7 @@ export class CategoriesService {
     {
       id: 1,
       name: 'name category',
-      company: 'name company',
+      description: 'deportes',
     },
   ];
   findAll() {
@@ -17,7 +18,7 @@ export class CategoriesService {
   findOne(id: number) {
     return this.categories.find((item) => item.id === id);
   }
-  create(payload: any) {
+  create(payload: CreateCategoryDto) {
     this.counterId = this.counterId + 1;
     const newCategory = {
       id: this.counterId,

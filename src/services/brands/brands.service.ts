@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CreateBrandDto } from 'src/dtos/brands.dtos';
 import { Brand } from 'src/entities/brands.entities';
 
 @Injectable()
@@ -8,6 +9,7 @@ export class BrandsService {
     {
       id: 1,
       name: 'name of brand',
+      img: 'image',
       company: 'admin',
     },
   ];
@@ -17,7 +19,7 @@ export class BrandsService {
   findOne(id: number) {
     return this.brands.find((item) => item.id === id);
   }
-  create(payload: any) {
+  create(payload: CreateBrandDto) {
     this.counterId = this.counterId + 1;
     const newBrand = {
       id: this.counterId,
