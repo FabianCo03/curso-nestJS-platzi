@@ -7,7 +7,7 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { CreateBrandDto } from 'src/dtos/brands.dtos';
+import { CreateBrandDto } from 'src/products/dtos/brands.dtos';
 
 @Controller('brands')
 export class BrandsController {
