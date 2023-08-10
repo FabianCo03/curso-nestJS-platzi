@@ -4,33 +4,42 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/users.dtos';
+import { UsersService } from '../services/users.service';
 
 @Controller('users')
 export class UsersController {
+  constructor(private usersService: UsersService) {}
+
   @Get()
   get() {
-    return `Users`;
+    return this.usersService.findAll();
   }
+
+  @Get(':id')
+  getId(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findOne(id);
+  }
+
   @Post()
   create(@Body() payload: CreateUserDto) {
-    return { message: 'Crear users', payload };
+    return this.usersService.create(payload);
   }
+
   @Put(':id')
-  update(@Param('id') id: number, @Body() payload: UpdateUserDto) {
-    return {
-      message: 'update brands',
-      id,
-      payload,
-    };
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateUserDto,
+  ) {
+    return this.usersService.update(id, payload);
   }
+
   @Delete(':id')
-  delete(@Param('id') id: number) {
-    return {
-      id: id,
-    };
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.remove(id);
   }
 }

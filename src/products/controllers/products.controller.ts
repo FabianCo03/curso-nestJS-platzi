@@ -6,8 +6,6 @@ import {
   Post,
   Body,
   Put,
-  HttpStatus,
-  HttpCode,
   Delete,
 } from '@nestjs/common';
 
@@ -39,7 +37,6 @@ export class ProductsController {
   }
 
   @Get(':productId')
-  @HttpCode(HttpStatus.ACCEPTED)
   getOne(@Param('productId', ParseIntPipe) productId: number) {
     return this.productsService.findOne(productId);
   }

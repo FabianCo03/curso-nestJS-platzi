@@ -1,5 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { CreateCategoryDto } from 'src/products/dtos/categories.dtos';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  CreateCategoryDto,
+  UpdateCategoryDto,
+} from 'src/products/dtos/categories.dtos';
 import { Categories } from 'src/products/entities/categories.entities';
 
 @Injectable()
@@ -15,9 +18,16 @@ export class CategoriesService {
   findAll() {
     return this.categories;
   }
+
   findOne(id: number) {
-    return this.categories.find((item) => item.id === id);
+    const category = this.categories.find((item) => item.id === id);
+    if (!category) {
+      throw new NotFoundException(`No existe id ${id}`);
+    } else {
+      return category;
+    }
   }
+
   create(payload: CreateCategoryDto) {
     this.counterId = this.counterId + 1;
     const newCategory = {
@@ -26,5 +36,22 @@ export class CategoriesService {
     };
     this.categories.push(newCategory);
     return newCategory;
+  }
+  update(id: number, payload: UpdateCategoryDto) {
+    const category = this.findOne(id);
+    if (category) {
+      const index = this.categories.findIndex((item) => item.id === id);
+      this.categories[index] = { ...category, ...payload };
+      return this.categories[index];
+    }
+    return null;
+  }
+  remove(id: number) {
+    const index = this.categories.findIndex((item) => item.id === id);
+    if (index === -1) {
+      throw new NotFoundException(`Category #${id} not found`);
+    }
+    this.categories.splice(index, 1);
+    return true;
   }
 }

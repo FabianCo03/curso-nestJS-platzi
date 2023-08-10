@@ -12,34 +12,36 @@ import {
   CreateCategoryDto,
   UpdateCategoryDto,
 } from 'src/products/dtos/categories.dtos';
-
+import { ParseIntPipe } from '@nestjs/common';
+import { CategoriesService } from '../services/categories.service';
 @Controller('categories')
 export class CategoriesController {
+  constructor(private categoriesService: CategoriesService) {}
   @Get()
   get() {
-    return `Categorias`;
+    return this.categoriesService.findAll();
   }
 
-  @Get(':id/products/:productId')
-  getId(@Param('productId') productId: string, @Param('id') id: string) {
-    return `category id = ${id} | product id = ${productId}`;
+  @Get(':id')
+  getId(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriesService.findOne(id);
   }
+
   @Post()
   create(@Body() payload: CreateCategoryDto) {
-    return { message: 'Crear category', payload };
+    return this.categoriesService.create(payload);
   }
+
   @Put(':id')
-  update(@Param('id') id: number, @Body() payload: UpdateCategoryDto) {
-    return {
-      message: 'update categories',
-      id,
-      payload,
-    };
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() payload: UpdateCategoryDto,
+  ) {
+    return this.categoriesService.update(id, payload);
   }
+
   @Delete(':id')
-  delete(@Param('id') id: number) {
-    return {
-      id: id,
-    };
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.categoriesService.remove(id);
   }
 }
