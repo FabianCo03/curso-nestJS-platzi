@@ -20,6 +20,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get(':id/orders')
+  getOrders(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.getOrderByUser(id);
+  }
+
   @Get(':id')
   getId(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOne(id);
