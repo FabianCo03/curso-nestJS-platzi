@@ -1,5 +1,6 @@
 import { IsString, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty, ApiTags, PartialType } from '@nestjs/swagger';
+import { Controller } from '@nestjs/common';
 export class CreateCustomerDto {
   @ApiProperty()
   @IsString()

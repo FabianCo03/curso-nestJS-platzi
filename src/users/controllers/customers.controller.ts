@@ -13,7 +13,8 @@ import {
   UpdateCustomerDto,
 } from 'src/users/dtos/customers.dtos';
 import { CustomersService } from '../services/customers.service';
-
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('Customers')
 @Controller('customers')
 export class CustomersController {
   constructor(private customersService: CustomersService) {}
