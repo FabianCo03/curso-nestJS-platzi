@@ -2,7 +2,7 @@ import {
   CreateCustomerDto,
   UpdateCustomerDto,
 } from 'src/users/dtos/customers.dtos';
-import { Customer } from 'src/users/entities/customers.entities';
+import { Customer } from 'src/users/entities/customers.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()

@@ -3,7 +3,7 @@ import {
   CreateCategoryDto,
   UpdateCategoryDto,
 } from 'src/products/dtos/categories.dtos';
-import { Categories } from 'src/products/entities/categories.entities';
+import { Categories } from 'src/products/entities/categories.entity';
 
 @Injectable()
 export class CategoriesService {
