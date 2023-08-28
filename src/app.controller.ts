@@ -8,4 +8,8 @@ export class AppController {
   goHome(): string {
     return this.appService.goHome();
   }
+  @Get('tasks')
+  tasks() {
+    return this.appService.getTasks();
+  }
 }
