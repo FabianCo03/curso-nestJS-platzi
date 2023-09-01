@@ -6,6 +6,7 @@ import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/users.dtos';
 import { User } from 'src/users/entities/users.entity';
 import { Order } from '../entities/orders.entity';
 import { ProductsService } from '../../products/services/products.service';
+import { IsEmail } from 'class-validator';
 
 @Injectable()
 export class UsersService {
@@ -21,6 +22,7 @@ export class UsersService {
       name: 'name of user',
       age: 20,
       role: '-',
+      email: 'fabian@email.com',
     },
   ];
 
@@ -76,6 +78,7 @@ export class UsersService {
     return {
       date: new Date(),
       user: user,
+      email: '',
       products: this.productsService.findAll(),
     };
   }
