@@ -1,17 +1,11 @@
 import { Client } from 'pg';
+import { ConfigType } from '@nestjs/config';
 import { Module, Global } from '@nestjs/common';
+
+import config from '../config';
 
 const API_KEY = '1234567';
 const API_KEY_PROD = 'PROD121212';
-
-const client = new Client({
-  user: 'root',
-  host: 'localhost',
-  database: 'my_db',
-  password: '123456',
-  port: 5432,
-});
-client.connect();
 
 // acá estoy creando la instancia global para no importar módulos
 @Global()
@@ -23,7 +17,20 @@ client.connect();
     },
     {
       provide: 'PG',
-      useValue: client,
+      // useFactory nos permite hacer inyección de dependencias
+      useFactory: (configService: ConfigType<typeof config>) => {
+        const { user, host, dbName, password, port } = configService.postgres;
+        const client = new Client({
+          user,
+          host,
+          database: dbName,
+          password,
+          port,
+        });
+        client.connect();
+        return client;
+      },
+      inject: [config.KEY],
     },
   ],
   exports: ['API_KEY', 'PG'],
