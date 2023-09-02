@@ -23,6 +23,10 @@ const API_KEY_PROD = 'PROD121212';
           host,
           port,
           password,
+          // aquí las tablas se sincronizan con la BD y van a crear las tablas correspondientes
+          synchronize: true,
+          // las entidades deben ser autocargadas - el solo busca entidades que hayamos creado en nuestro código y sincronizar
+          autoLoadEntities: true,
         };
       },
     }),

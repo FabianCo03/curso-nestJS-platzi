@@ -6,7 +6,6 @@ import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/users.dtos';
 import { User } from 'src/users/entities/users.entity';
 import { Order } from '../entities/orders.entity';
 import { ProductsService } from '../../products/services/products.service';
-import { IsEmail } from 'class-validator';
 
 @Injectable()
 export class UsersService {
@@ -73,15 +72,16 @@ export class UsersService {
     return true;
   }
 
-  getOrderByUser(id: number): Order {
+  async getOrderByUser(id: number) {
     const user = this.findOne(id);
     return {
       date: new Date(),
       user: user,
       email: '',
-      products: this.productsService.findAll(),
+      products: await this.productsService.findAll(),
     };
   }
+
   getTasks() {
     return new Promise((resolve, reject) => {
       this.clientPg.query('SELECT * FROM tasks', (err, res) => {
