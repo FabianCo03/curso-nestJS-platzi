@@ -4,52 +4,46 @@ import {
 } from 'src/users/dtos/customers.dtos';
 import { Customer } from 'src/users/entities/customers.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CustomersService {
-  private counterId = 1;
-  private customers: Customer[] = [
-    {
-      id: 1,
-      name: 'name of customer',
-      age: 20,
-    },
-  ];
+  constructor(
+    @InjectRepository(Customer) private customerRepo: Repository<Customer>,
+  ) {}
   findAll() {
-    return this.customers;
+    // aquí dentro de find puedo colocar un WHERE de MySQL
+    return this.customerRepo.find();
   }
-  findOne(id: number) {
-    const customer = this.customers.find((item) => item.id === id);
+
+  async findOne(id: number) {
+    const customer = await this.customerRepo.findOne(id);
     if (!customer) {
       throw new NotFoundException(`No existe id ${id}`);
     } else {
       return customer;
     }
   }
-  create(payload: CreateCustomerDto) {
-    this.counterId = this.counterId + 1;
-    const newCustomer = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.customers.push(newCustomer);
-    return newCustomer;
+
+  create(data: CreateCustomerDto) {
+    const newCustomer = this.customerRepo.create(data);
+    return this.customerRepo.save(newCustomer);
   }
-  update(id: number, payload: UpdateCustomerDto) {
-    const customer = this.findOne(id);
-    if (customer) {
-      const index = this.customers.findIndex((item) => item.id === id);
-      this.customers[index] = { ...customer, ...payload };
-      return this.customers[index];
-    }
-    return null;
+
+  async update(id: number, changes: UpdateCustomerDto) {
+    const customer = await this.customerRepo.findOne(id);
+    this.customerRepo.merge(customer, changes);
+    return this.customerRepo.save(customer);
   }
-  remove(id: number) {
-    const index = this.customers.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`Customer #${id} not found`);
+
+  async remove(id: number) {
+    const customer = await this.customerRepo.findOne(id);
+
+    if (!customer) {
+      throw new NotFoundException(`No existe id ${id}`);
+    } else {
+      return this.customerRepo.delete(id);
     }
-    this.customers.splice(index, 1);
-    return true;
   }
 }

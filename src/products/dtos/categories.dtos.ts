@@ -7,11 +7,6 @@ export class CreateCategoryDto {
   readonly name: string;
 
   @ApiProperty()
-  @IsUrl()
-  @IsNotEmpty()
-  readonly img: string;
-
-  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   readonly description: string;

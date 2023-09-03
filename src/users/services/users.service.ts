@@ -1,41 +1,26 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { Client } from 'pg';
+import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/users.dtos';
 import { User } from 'src/users/entities/users.entity';
-import { Order } from '../entities/orders.entity';
-import { ProductsService } from '../../products/services/products.service';
+import { Product } from 'src/products/entities/products.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+// falta que en get orders by id, salga la orden
+// import { Order } from '../entities/orders.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
-    private productsService: ProductsService,
-    private configService: ConfigService,
-    @Inject('PG') private clientPg: Client,
+    @InjectRepository(User) private userRepo: Repository<User>,
+    @InjectRepository(Product) private productRepo: Repository<Product>,
   ) {}
-  private counterId = 1;
-  private users: User[] = [
-    {
-      id: 1,
-      name: 'name of user',
-      age: 20,
-      role: '-',
-      email: 'fabian@email.com',
-    },
-  ];
-
   findAll() {
-    // variables archivo .env
-    const apiKey = this.configService.get('API_KEY');
-    const dbName = this.configService.get('DATABASE_NAME');
-    console.log(apiKey, dbName);
-
-    return this.users;
+    // aquí dentro de find puedo colocar un WHERE de MySQL
+    return this.userRepo.find();
   }
 
-  findOne(id: number) {
-    const user = this.users.find((item) => item.id === id);
+  async findOne(id: number) {
+    const user = await this.userRepo.findOne(id);
     if (!user) {
       throw new NotFoundException(`No existe id ${id}`);
     } else {
@@ -43,33 +28,24 @@ export class UsersService {
     }
   }
 
-  create(payload: CreateUserDto) {
-    this.counterId = this.counterId + 1;
-    const newUser = {
-      id: this.counterId,
-      ...payload,
-    };
-    this.users.push(newUser);
-    return newUser;
+  create(data: CreateUserDto) {
+    const newUser = this.userRepo.create(data);
+    return this.userRepo.save(newUser);
   }
 
-  update(id: number, payload: UpdateUserDto) {
-    const user = this.findOne(id);
-    if (user) {
-      const index = this.users.findIndex((item) => item.id === id);
-      this.users[index] = { ...user, ...payload };
-      return this.users[index];
-    }
-    return null;
+  async update(id: number, changes: UpdateUserDto) {
+    const user = await this.userRepo.findOne(id);
+    this.userRepo.merge(user, changes);
+    return this.userRepo.save(user);
   }
 
-  remove(id: number) {
-    const index = this.users.findIndex((item) => item.id === id);
-    if (index === -1) {
-      throw new NotFoundException(`User #${id} not found`);
+  async remove(id: number) {
+    const user = await this.userRepo.findOne(id);
+    if (!user) {
+      throw new NotFoundException(`No existe id ${id}`);
+    } else {
+      return this.userRepo.delete(id);
     }
-    this.users.splice(index, 1);
-    return true;
   }
 
   async getOrderByUser(id: number) {
@@ -78,18 +54,7 @@ export class UsersService {
       date: new Date(),
       user: user,
       email: '',
-      products: await this.productsService.findAll(),
+      products: await this.productRepo.find(),
     };
-  }
-
-  getTasks() {
-    return new Promise((resolve, reject) => {
-      this.clientPg.query('SELECT * FROM tasks', (err, res) => {
-        if (err) {
-          reject(err);
-        }
-        resolve(res.rows);
-      });
-    });
   }
 }

@@ -16,38 +16,40 @@ export class ProductsService {
     // aquí dentro de find puedo colocar un WHERE de MySQL
     return this.productRepo.find();
   }
-  findOne(id: number) {
-    const product = this.productRepo.findOne(id);
+
+  async findOne(id: number) {
+    const product = await this.productRepo.findOne(id);
     if (!product) {
       throw new NotFoundException(`No existe id ${id}`);
     } else {
       return product;
     }
   }
-  // create(payload: CreateProductDto) {
-  //   this.counterId = this.counterId + 1;
-  //   const newProduct = {
-  //     id: this.counterId,
-  //     ...payload,
-  //   };
-  //   this.products.push(newProduct);
-  //   return newProduct;
-  // }
-  // update(id: number, payload: UpdateProductDto) {
-  //   const product = this.findOne(id);
-  //   if (product) {
-  //     const index = this.products.findIndex((item) => item.id === id);
-  //     this.products[index] = { ...product, ...payload };
-  //     return this.products[index];
-  //   }
-  //   return null;
-  // }
-  // remove(id: number) {
-  //   const index = this.products.findIndex((item) => item.id === id);
-  //   if (index === -1) {
-  //     throw new NotFoundException(`Product #${id} not found`);
-  //   }
-  //   this.products.splice(index, 1);
-  //   return true;
-  // }
+
+  create(data: CreateProductDto) {
+    const newProduct = this.productRepo.create(data);
+    return this.productRepo.save(newProduct);
+    // const newProduct = new Product();
+    // newProduct.name = data.name;
+    // newProduct.description = data.description;
+    // newProduct.price = data.price;
+    // newProduct.stock = data.stock;
+    // newProduct.img = data.img;
+  }
+
+  async update(id: number, changes: UpdateProductDto) {
+    const product = await this.productRepo.findOne(id);
+    this.productRepo.merge(product, changes);
+    return this.productRepo.save(product);
+  }
+
+  async remove(id: number) {
+    const product = await this.productRepo.findOne(id);
+
+    if (!product) {
+      throw new NotFoundException(`No existe id ${id}`);
+    } else {
+      return this.productRepo.delete(id);
+    }
+  }
 }
