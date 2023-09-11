@@ -23,8 +23,8 @@ const API_KEY_PROD = 'PROD121212';
           host,
           port,
           password,
-          // aquí las tablas se sincronizan con la BD y van a crear las tablas correspondientes
-          synchronize: true,
+          // aquí las tablas se sincronizan con la BD y van a crear las tablas correspondientes - Está en false porque para eso están las migraciones
+          synchronize: false,
           // las entidades deben ser autocargadas - el solo busca entidades que hayamos creado en nuestro código y sincronizar
           autoLoadEntities: true,
         };
