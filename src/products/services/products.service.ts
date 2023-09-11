@@ -18,7 +18,9 @@ export class ProductsService {
   }
 
   async findOne(id: number) {
-    const product = await this.productRepo.findOne(id);
+    const product = await this.productRepo.findOne({
+      where: { id },
+    });
     if (!product) {
       throw new NotFoundException(`No existe id ${id}`);
     } else {
@@ -38,13 +40,17 @@ export class ProductsService {
   }
 
   async update(id: number, changes: UpdateProductDto) {
-    const product = await this.productRepo.findOne(id);
+    const product = await this.productRepo.findOne({
+      where: { id },
+    });
     this.productRepo.merge(product, changes);
     return this.productRepo.save(product);
   }
 
   async remove(id: number) {
-    const product = await this.productRepo.findOne(id);
+    const product = await this.productRepo.findOne({
+      where: { id },
+    });
 
     if (!product) {
       throw new NotFoundException(`No existe id ${id}`);

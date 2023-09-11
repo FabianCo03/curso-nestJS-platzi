@@ -17,7 +17,9 @@ export class CategoriesService {
   }
 
   async findOne(id: number) {
-    const category = await this.categoryRepo.findOne(id);
+    const category = await this.categoryRepo.findOne({
+      where: { id },
+    });
     if (!category) {
       throw new NotFoundException(`No existe id ${id}`);
     } else {
@@ -31,13 +33,17 @@ export class CategoriesService {
   }
 
   async update(id: number, changes: UpdateCategoryDto) {
-    const category = await this.categoryRepo.findOne(id);
+    const category = await this.categoryRepo.findOne({
+      where: { id },
+    });
     this.categoryRepo.merge(category, changes);
     return this.categoryRepo.save(category);
   }
 
   async remove(id: number) {
-    const category = await this.categoryRepo.findOne(id);
+    const category = await this.categoryRepo.findOne({
+      where: { id },
+    });
 
     if (!category) {
       throw new NotFoundException(`No existe id ${id}`);

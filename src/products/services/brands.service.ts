@@ -11,7 +11,9 @@ export class BrandsService {
     return this.brandRepo.find();
   }
   async findOne(id: number) {
-    const brand = await this.brandRepo.findOne(id);
+    const brand = await this.brandRepo.findOne({
+      where: { id },
+    });
     if (!brand) {
       throw new NotFoundException(`No existe id ${id}`);
     } else {
@@ -25,13 +27,17 @@ export class BrandsService {
   }
 
   async update(id: number, changes: UpdateBrandDto) {
-    const brand = await this.brandRepo.findOne(id);
+    const brand = await this.brandRepo.findOne({
+      where: { id },
+    });
     this.brandRepo.merge(brand, changes);
     return this.brandRepo.save(brand);
   }
 
   async remove(id: number) {
-    const brand = await this.brandRepo.findOne(id);
+    const brand = await this.brandRepo.findOne({
+      where: { id },
+    });
     if (!brand) {
       throw new NotFoundException(`No existe id ${id}`);
     } else {

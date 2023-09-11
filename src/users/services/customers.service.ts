@@ -18,7 +18,9 @@ export class CustomersService {
   }
 
   async findOne(id: number) {
-    const customer = await this.customerRepo.findOne(id);
+    const customer = await this.customerRepo.findOne({
+      where: { id },
+    });
     if (!customer) {
       throw new NotFoundException(`No existe id ${id}`);
     } else {
@@ -32,13 +34,17 @@ export class CustomersService {
   }
 
   async update(id: number, changes: UpdateCustomerDto) {
-    const customer = await this.customerRepo.findOne(id);
+    const customer = await this.customerRepo.findOne({
+      where: { id },
+    });
     this.customerRepo.merge(customer, changes);
     return this.customerRepo.save(customer);
   }
 
   async remove(id: number) {
-    const customer = await this.customerRepo.findOne(id);
+    const customer = await this.customerRepo.findOne({
+      where: { id },
+    });
 
     if (!customer) {
       throw new NotFoundException(`No existe id ${id}`);
