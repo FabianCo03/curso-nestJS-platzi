@@ -1,20 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-
-import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/users.dtos';
-import { User } from 'src/users/entities/users.entity';
-import { Product } from 'src/products/entities/products.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-// falta que en get orders by id, salga la orden
-// import { Order } from '../entities/orders.entity';
+
+import { ConfigService } from '@nestjs/config';
+import { CreateUserDto, UpdateUserDto } from 'src/users/dtos/users.dtos';
+import { ProductsService } from 'src/products/services/products.service';
+import { User } from 'src/users/entities/users.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
+    private productsService: ProductsService,
+    private configService: ConfigService,
     @InjectRepository(User) private userRepo: Repository<User>,
-    @InjectRepository(Product) private productRepo: Repository<Product>,
   ) {}
   findAll() {
+    const apiKey = this.configService.get('API_KEY');
+    const dbName = this.configService.get('DATABASE_NAME');
+    console.log(apiKey, dbName);
     // aquí dentro de find puedo colocar un WHERE de MySQL
     return this.userRepo.find();
   }
@@ -58,9 +61,8 @@ export class UsersService {
     const user = this.findOne(id);
     return {
       date: new Date(),
-      user: user,
-      email: '',
-      products: await this.productRepo.find(),
+      user,
+      products: await this.productsService.findAll(),
     };
   }
 }
