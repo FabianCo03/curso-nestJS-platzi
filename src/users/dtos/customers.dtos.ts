@@ -1,6 +1,6 @@
-import { IsString, IsNotEmpty, IsNumber, IsPositive } from 'class-validator';
-import { ApiProperty, ApiTags, PartialType } from '@nestjs/swagger';
-import { Controller } from '@nestjs/common';
+import { IsString, IsNotEmpty, IsPhoneNumber } from 'class-validator';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
+
 export class CreateCustomerDto {
   @ApiProperty()
   @IsString()
@@ -8,10 +8,14 @@ export class CreateCustomerDto {
   readonly name: string;
 
   @ApiProperty()
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  @IsPositive()
-  readonly age: number;
+  readonly lastname: string;
+
+  @ApiProperty()
+  @IsPhoneNumber()
+  @IsNotEmpty()
+  readonly phone: string;
 }
 
 export class UpdateCustomerDto extends PartialType(CreateCustomerDto) {}
