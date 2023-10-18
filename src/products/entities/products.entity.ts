@@ -37,7 +37,7 @@ export class Product {
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updateAt: Date;
 
-  // La relación va en el que tenga el decorador ManyToOne
+  // La relación va en el que tenga el decorador @ManyToOne
   @ManyToOne(() => Brand, (brand) => brand.products)
   brand: Brand;
 }
