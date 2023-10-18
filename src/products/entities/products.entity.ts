@@ -28,7 +28,7 @@ export class Product {
   @Column({ type: 'varchar' })
   img: string;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'int' })
   brandId: number;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' }) // el mismo organiza la zona horaria

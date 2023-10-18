@@ -34,6 +34,7 @@ export class CreateProductDto {
   @IsNotEmpty()
   readonly img: string;
 
+  // La relación es obligatoria
   @ApiProperty()
   @IsPositive()
   @IsNotEmpty()

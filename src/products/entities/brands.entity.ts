@@ -16,6 +16,9 @@ export class Brand {
   @Column({ type: 'varchar', length: 255, unique: true })
   name: string;
 
+  @Column({ type: 'varchar', length: 255, unique: true })
+  company: string;
+
   @Column({ type: 'varchar' })
   img: string;
 

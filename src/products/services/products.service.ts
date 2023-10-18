@@ -2,12 +2,12 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Product } from 'src/products/entities/products.entity';
+import { BrandsService } from './brands.service';
 import {
   CreateProductDto,
   UpdateProductDto,
 } from 'src/products/dtos/products.dtos';
-import { BrandsService } from './brands.service';
+import { Product } from 'src/products/entities/products.entity';
 @Injectable()
 export class ProductsService {
   constructor(
@@ -35,6 +35,7 @@ export class ProductsService {
     const newProduct = this.productRepo.create(data);
     if (data.brandId) {
       const brand = await this.brandsService.findOne(data.brandId);
+      // Ese nuevo producto tendrá una marca, y le asigno la marca
       newProduct.brand = brand;
     }
     return this.productRepo.save(newProduct);

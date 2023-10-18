@@ -14,7 +14,7 @@ export class BrandsService {
   findOne(id: number) {
     const product = this.brandRepo.findOne({
       where: { id },
-      relations: ['product'],
+      relations: ['products'],
     });
     if (!product) {
       throw new NotFoundException(`No existe id ${id}`);
