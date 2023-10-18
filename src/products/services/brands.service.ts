@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateBrandDto, UpdateBrandDto } from 'src/products/dtos/brands.dtos';
+
 import { Brand } from 'src/products/entities/brands.entity';
+import { CreateBrandDto, UpdateBrandDto } from 'src/products/dtos/brands.dtos';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -10,15 +11,15 @@ export class BrandsService {
   findAll() {
     return this.brandRepo.find();
   }
-  async findOne(id: number) {
-    const brand = await this.brandRepo.findOne({
+  findOne(id: number) {
+    const product = this.brandRepo.findOne({
       where: { id },
+      relations: ['product'],
     });
-    if (!brand) {
+    if (!product) {
       throw new NotFoundException(`No existe id ${id}`);
-    } else {
-      return brand;
     }
+    return product;
   }
 
   create(data: CreateBrandDto) {
@@ -30,8 +31,12 @@ export class BrandsService {
     const brand = await this.brandRepo.findOne({
       where: { id },
     });
-    this.brandRepo.merge(brand, changes);
-    return this.brandRepo.save(brand);
+    if (!brand) {
+      throw new NotFoundException(`No existe id ${id}`);
+    } else {
+      this.brandRepo.merge(brand, changes);
+      return this.brandRepo.save(brand);
+    }
   }
 
   async remove(id: number) {

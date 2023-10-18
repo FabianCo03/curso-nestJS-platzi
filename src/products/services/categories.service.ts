@@ -36,8 +36,12 @@ export class CategoriesService {
     const category = await this.categoryRepo.findOne({
       where: { id },
     });
-    this.categoryRepo.merge(category, changes);
-    return this.categoryRepo.save(category);
+    if (!category) {
+      throw new NotFoundException(`No existe id ${id}`);
+    } else {
+      this.categoryRepo.merge(category, changes);
+      return this.categoryRepo.save(category);
+    }
   }
 
   async remove(id: number) {

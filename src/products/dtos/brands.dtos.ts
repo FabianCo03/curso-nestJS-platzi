@@ -10,11 +10,6 @@ export class CreateBrandDto {
   @IsUrl()
   @IsNotEmpty()
   readonly img: string;
-
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  readonly company: string;
 }
 
 export class UpdateBrandDto extends PartialType(CreateBrandDto) {}

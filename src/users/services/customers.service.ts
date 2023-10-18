@@ -37,8 +37,12 @@ export class CustomersService {
     const customer = await this.customerRepo.findOne({
       where: { id },
     });
-    this.customerRepo.merge(customer, changes);
-    return this.customerRepo.save(customer);
+    if (!customer) {
+      throw new NotFoundException(`No existe id ${id}`);
+    } else {
+      this.customerRepo.merge(customer, changes);
+      return this.customerRepo.save(customer);
+    }
   }
 
   async remove(id: number) {

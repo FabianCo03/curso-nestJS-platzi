@@ -50,8 +50,16 @@ export class UsersService {
     const user = await this.userRepo.findOne({
       where: { id },
     });
-    this.userRepo.merge(user, changes);
-    return this.userRepo.save(user);
+    if (changes.customerId) {
+      const customer = await this.customersService.findOne(changes.customerId);
+      user.customer = customer;
+    }
+    if (!user) {
+      throw new NotFoundException(`No existe id ${id}`);
+    } else {
+      this.userRepo.merge(user, changes);
+      return this.userRepo.save(user);
+    }
   }
 
   async remove(id: number) {

@@ -4,7 +4,9 @@ import {
   Entity,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
+import { Brand } from './brands.entity';
 
 @Entity()
 export class Product {
@@ -26,9 +28,16 @@ export class Product {
   @Column({ type: 'varchar' })
   img: string;
 
+  @Column({ type: 'varchar' })
+  brandId: number;
+
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' }) // el mismo organiza la zona horaria
   createAt: Date;
 
   @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   updateAt: Date;
+
+  // La relación va en el que tenga el decorador ManyToOne
+  @ManyToOne(() => Brand, (brand) => brand.products)
+  brand: Brand;
 }
