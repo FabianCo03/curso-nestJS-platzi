@@ -5,9 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Brand } from './brands.entity';
-
+import { Category } from './categories.entity';
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
@@ -40,4 +42,8 @@ export class Product {
   // La relación va en el que tenga el decorador @ManyToOne
   @ManyToOne(() => Brand, (brand) => brand.products)
   brand: Brand;
+
+  @ManyToMany(() => Category, (category) => category.products)
+  @JoinTable() // Va solo en un lado de la relación
+  categories: Category[];
 }
