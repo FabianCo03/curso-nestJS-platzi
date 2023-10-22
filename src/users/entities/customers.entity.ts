@@ -1,13 +1,14 @@
 import {
-  PrimaryGeneratedColumn,
   Column,
-  Entity,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
+  OneToMany,
   OneToOne,
-  JoinColumn,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from './users.entity';
+import { Order } from './orders.entity';
 @Entity()
 export class Customer {
   @PrimaryGeneratedColumn()
@@ -30,4 +31,7 @@ export class Customer {
 
   @OneToOne(() => User, (user) => user.customer, { nullable: true }) // desde la tabla de 'user' quien tiene la referencia hacía la tabla 'customer'
   user: User;
+
+  @OneToMany(() => Order, (order) => order.customer)
+  order: Order[];
 }

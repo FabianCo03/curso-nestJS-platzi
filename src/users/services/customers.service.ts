@@ -10,10 +10,9 @@ import { Customer } from 'src/users/entities/customers.entity';
 @Injectable()
 export class CustomersService {
   constructor(
-    @InjectRepository(Customer) private customerRepo: Repository<Customer>,
+    @InjectRepository(Customer) private customerRepo: Repository<Customer>
   ) {}
   findAll() {
-    // aquí dentro de find puedo colocar un WHERE de MySQL
     return this.customerRepo.find();
   }
 

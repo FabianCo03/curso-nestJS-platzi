@@ -11,7 +11,7 @@ export class AppService {
     // @Inject('API_KEY') private apiKey: string,
     // @Inject('TASKS') private tasks: any[],
     @Inject('PG') private clientPg: Client,
-    @Inject(config.KEY) private configService: ConfigType<typeof config>,
+    @Inject(config.KEY) private configService: ConfigType<typeof config>
   ) {}
   goHome(): string {
     const apiKey = this.configService.apikey;

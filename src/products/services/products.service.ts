@@ -6,7 +6,7 @@ import {
   CreateProductDto,
   UpdateProductDto,
 } from 'src/products/dtos/products.dtos';
-import { Product } from 'src/products/entities/products.entity';
+import { Product } from '../entities/products.entity';
 import { Category } from '../entities/categories.entity';
 import { Brand } from '../entities/brands.entity';
 @Injectable()
@@ -14,7 +14,7 @@ export class ProductsService {
   constructor(
     @InjectRepository(Product) private productRepo: Repository<Product>,
     @InjectRepository(Category) private categoryRepo: Repository<Category>,
-    @InjectRepository(Brand) private brandRepo: Repository<Brand>,
+    @InjectRepository(Brand) private brandRepo: Repository<Brand>
   ) {}
   findAll() {
     return this.productRepo.find({
@@ -81,7 +81,7 @@ export class ProductsService {
       throw new NotFoundException(`No existe id ${productId}`);
     }
     product.categories = product.categories.filter(
-      (item) => item.id !== categoryId,
+      (item) => item.id !== categoryId
     );
     return this.productRepo.save(product);
   }

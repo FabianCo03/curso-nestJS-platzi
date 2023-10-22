@@ -10,7 +10,7 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class CategoriesService {
   constructor(
-    @InjectRepository(Category) private categoryRepo: Repository<Category>,
+    @InjectRepository(Category) private categoryRepo: Repository<Category>
   ) {}
   findAll() {
     return this.categoryRepo.find();

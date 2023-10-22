@@ -26,7 +26,7 @@ export class ProductsController {
   getProducts(
     @Query('limit') _limit = 100,
     @Query('offset') _offset = 0,
-    @Query('brand') _brand: string,
+    @Query('brand') _brand: string
   ) {
     return this.productsService.findAll();
   }
@@ -49,7 +49,7 @@ export class ProductsController {
   @Put(':id')
   update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UpdateProductDto,
+    @Body() payload: UpdateProductDto
   ) {
     return this.productsService.update(id, payload);
   }
@@ -61,7 +61,7 @@ export class ProductsController {
   @Put(':id/category/:categoryId')
   addCategoryByProduct(
     @Param('id', ParseIntPipe) id: number,
-    @Param('categoryId', ParseIntPipe) categoryId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number
   ) {
     return this.productsService.addCategoryByProduct(id, categoryId);
   }
@@ -69,7 +69,7 @@ export class ProductsController {
   @Delete(':id/category/:categoryId')
   deleteCategory(
     @Param('id', ParseIntPipe) id: number,
-    @Param('categoryId', ParseIntPipe) categoryId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number
   ) {
     return this.productsService.removeCategoryByProduct(id, categoryId);
   }

@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Brand } from './brands.entity';
 import { Category } from './categories.entity';
+
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
@@ -44,6 +45,6 @@ export class Product {
   brand: Brand;
 
   @ManyToMany(() => Category, (category) => category.products)
-  @JoinTable() // Va solo en un lado de la relación
+  @JoinTable()
   categories: Category[];
 }

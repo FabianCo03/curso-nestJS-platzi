@@ -14,7 +14,7 @@ export class UsersService {
     private productsService: ProductsService,
     private configService: ConfigService,
     @InjectRepository(User) private userRepo: Repository<User>,
-    private customersService: CustomersService,
+    private customersService: CustomersService
   ) {}
   findAll() {
     const apiKey = this.configService.get('API_KEY');

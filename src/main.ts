@@ -11,7 +11,7 @@ async function bootstrap() {
       whitelist: true,
       // coloca problema por campo extra
       forbidNonWhitelisted: true,
-    }),
+    })
   );
 
   const config = new DocumentBuilder()
