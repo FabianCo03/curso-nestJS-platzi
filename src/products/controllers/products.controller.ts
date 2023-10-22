@@ -24,11 +24,8 @@ export class ProductsController {
   constructor(private productsService: ProductsService) {}
   @Get()
   getProducts(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Query('limit') _limit = 100,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Query('offset') _offset = 0,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     @Query('brand') _brand: string,
   ) {
     return this.productsService.findAll();
