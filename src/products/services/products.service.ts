@@ -60,10 +60,50 @@ export class ProductsService {
     }
     if (!product) {
       throw new NotFoundException(`No existe id ${id}`);
-    } else {
-      this.productRepo.merge(product, changes);
-      return this.productRepo.save(product);
     }
+    if (changes.categoriesIds) {
+      const categories = await this.categoryRepo.findBy({
+        id: In(changes.categoriesIds),
+      });
+      product.categories = categories;
+    }
+    this.productRepo.merge(product, changes);
+    return this.productRepo.save(product);
+  }
+
+  async removeCategoryByProduct(productId: number, categoryId: number) {
+    const product = await this.productRepo.findOne({
+      where: { id: productId },
+      relations: ['categories'],
+    });
+
+    if (!product) {
+      throw new NotFoundException(`No existe id ${productId}`);
+    }
+    product.categories = product.categories.filter(
+      (item) => item.id !== categoryId,
+    );
+    return this.productRepo.save(product);
+  }
+
+  async addCategoryByProduct(productId: number, categoryId: number) {
+    const product = await this.productRepo.findOne({
+      where: { id: productId },
+      relations: ['categories'],
+    });
+
+    if (!product) {
+      throw new NotFoundException(`No existe id ${productId}`);
+    }
+    const category = await this.categoryRepo.findOne({
+      where: { id: categoryId },
+      // relations: ['categories'],
+    });
+    if (!category) {
+      throw new NotFoundException(`No existe id ${categoryId}`);
+    }
+    product.categories.push(category);
+    return this.productRepo.save(product);
   }
 
   async remove(id: number) {
